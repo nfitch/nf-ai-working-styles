@@ -1,12 +1,10 @@
 # Claude Context - [PROJECT NAME]
 
-## Working Styles
+## CRITICAL: Session Startup - Working Styles
 
-This project uses AI agent working styles for consistent collaboration.
+**At the start of every session, you MUST:**
 
-Consult `working-styles/README.md` for instructions.
-
-**Note:** The `working-styles/` directory is symlinked. Read access requires user-level permissions configured in `~/.claude/settings.json` (see BOOTSTRAP.md in nf-ai-working-styles repo).
+Read `working-styles/README.md` and follow the instructions there.
 
 ---
 
