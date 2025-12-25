@@ -181,32 +181,280 @@ nf structures projects in clear, sequential phases:
 - MVP milestone clearly defined
 - Post-MVP enhancements identified separately
 
-### Documentation First
-Before any implementation:
-1. Problem statement and overview
-2. Requirements (must-haves and nice-to-haves)
-3. Domain model with data structures
-4. Current state analysis
-5. Interface sketches
-6. Architecture overview (tech-agnostic)
-7. Technology stack decisions
-8. Then begin implementation phases
+### Documentation First - Mandatory Pre-Implementation
+
+**BEFORE starting ANY implementation:**
+
+1. **Ask about complexity** - "How complex is this feature? Should I create formal design docs?"
+2. **Create design documents** (for non-trivial features):
+   - Problem statement and overview
+   - Requirements (must-haves and nice-to-haves)
+   - Domain model with data structures
+   - Current state analysis (if relevant)
+   - Interface sketches
+   - Architecture overview (tech-agnostic initially)
+   - Technology stack decisions (separate, after architecture)
+3. **Create implementation checklist** (in `design/` directory)
+   - Git-tracked for crash recovery
+   - Hierarchical task breakdown
+   - Testing strategy documented upfront
+   - Review gates clearly marked
+   - Referenced from project CLAUDE.md
+4. **Define JSON schemas** (if data structures involved)
+5. **Get approval** - Wait for "yes" before starting implementation
+
+**Design Document Structure:**
+
+Use numbered prefix pattern:
+- `00-` prefix for meta documents (index, key-decisions, unsolved-architectural)
+- `01-07` for core foundation (overview → requirements → domain → current-state → interfaces → architecture → tech-stack)
+- `phase-N-checklist.md` for implementation plans
+- Each document cross-references related documents
+
+**Standard sections in design docs:**
+
+**01-project-overview.md:**
+- Project Name
+- Problem Statement
+- Business Impact
+- Solution Approach
+- Theme explanation (if applicable)
+
+**02-requirements.md:**
+- Hard Requirements (Must Have) - numbered list
+- Nice-to-Haves (Post-MVP) - numbered list
+- Critical notes inline explaining importance
+
+**03-domain-model.md:**
+- Core Concepts with definitions
+- Field-by-field specifications
+- Foreign key relationships
+- Rationale for modeling choices
+
+**00-key-decisions.md:**
+- Organized by category (Architecture, Data Model, Interface, Implementation)
+- Each decision includes: statement, rationale, technical details, code examples (Good vs Bad)
+- References to related documents
+- Impact on implementation
+
+**Design principles:**
+- Architecture before technology
+- Tech-agnostic initially, technology choices documented separately
+- Structured for Claude to understand and maintain context
+- Keep docs current - remove cruft, no outdated information
+- Concrete examples over abstract descriptions
+
+### Checklist Patterns
+
+**Structure requirements:**
+
+Use hierarchical task breakdown with clear review gates:
+
+```markdown
+# Phase N: [Name] - Implementation Checklist
+
+## Overview
+- Status: [IN PROGRESS/COMPLETED]
+- [Brief description]
+- [Key features list]
+
+---
+
+## Phase 0: Preparation
+- [ ] Task with checkbox
+- [ ] Sub-task indented
+
+**REVIEW GATE:** Pause for user feedback before starting implementation
+
+## Phase 1: Implementation
+### Component A - Tests First
+- [ ] Create ComponentName.test.tsx
+- [ ] Test: [specific test case]
+- [ ] Test: [another test case]
+
+### Component A - Implementation
+- [ ] Create ComponentName.tsx
+- [ ] Implement functionality
+- [ ] Verify all tests pass
+
+**REVIEW GATE:** Pause for manual testing before continuing
+
+## Phase 2: [Next Phase]
+...
+```
+
+**Key checklist patterns:**
+- Checkbox format: `[ ]` incomplete, `[x]` complete (NEVER emojis)
+- Review gates after: design/planning phase, after implementation before next phase
+- Testing strategy documented at top
+- TDD pattern: tests first, then implementation, then verify
+- Task breakdown to individual file level: "Create webapp/src/components/Foo.tsx"
+- Success criteria defined
+- Iterative: build incrementally with feedback loops
+- Cross-references to schemas, design docs, related checklists
+
+**Review gate placement:**
+- After design documents and checklists complete, before implementation starts
+- After implementation complete, before committing (manual testing phase)
+- Between major phases when scope or approach might need adjustment
 
 ### Git Workflow
-- **Commit periodically** to save progress
-- **CRITICAL: Don't commit until manual testing is complete** - Always wait for nf to manually verify functionality before committing
-- **CRITICAL: NEVER use `git add -A` or `git add .`** - Multiple people/agents work in this repo simultaneously
-  - ONLY add specific files you've modified: `git add file1 file2 file3`
-  - List files explicitly to avoid staging unrelated changes from other work streams
-  - This prevents merge conflicts and collisions between concurrent work
-- **NEVER offer to push commits** - nf always pushes to remote themselves
-  - Don't ask "Should I push to remote?"
-  - Don't include "push" in next steps suggestions
+
+**Commit format (EXACT - no robot emoji):**
+```
+Commit message summary
+
+Details about changes...
+Impact details (lines affected, files, behavior changes)...
+
+Generated with Claude Code
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+```
+
+**Commit message patterns:**
+- Summary: Imperative mood ("Add", "Fix", "Extract", "Update", "Remove")
+- Specific: mention file names or exact changes
+- Body: provide impact details (LOC, files affected, rationale)
+- Examples:
+  - "Fix service weights validation - add new fields, remove DirectPagerLink"
+  - "Extract duplicate rename modal logic into useEntityRename hook"
+  - "Add alias deletion protection and fix team rename bug"
+
+**Commit workflow:**
+- **Commit frequency:** Agent manages, whenever convenient (typically after phase completion)
+- **CRITICAL: Never commit until manual testing complete** - Always wait for nf to verify functionality
+- **CRITICAL: NEVER use `git add -A` or `git add .`** - Multiple agents work in repo simultaneously
+  - ONLY stage specific files: `git add file1 file2 file3`
+  - List every file explicitly to avoid staging unrelated changes
+  - Prevents merge conflicts and collisions between concurrent work
+- **NEVER offer to push commits** - nf always pushes to remote
+  - Don't ask "Should I push?"
+  - Don't include "push" in next steps
   - Pushing is always nf's responsibility
-- Use descriptive commit messages
-- Include "Generated with Claude Code" footer with co-author
 - Stage changes, review status before committing
-- User may interrupt if commit message format is wrong
+- User may interrupt if commit format wrong
+
+### Testing Patterns
+
+**TDD Approach - ALWAYS:**
+1. Write comprehensive tests FIRST
+2. Implement code to pass tests
+3. Verify all tests pass
+4. Never reduce code coverage
+
+**Test organization patterns:**
+- Unit tests: `ComponentName.test.tsx`, `utility.test.ts`
+- Integration tests: `__tests__/integration/feature.test.ts`
+- API tests: `api-endpoints.test.ts`
+- Security tests: `loader.security.test.ts`
+- Domain-specific: `domain-logic.test.ts`
+
+**Standard test structure:**
+```typescript
+describe('ComponentName', () => {
+  test('renders without crashing', () => { ... });
+  test('displays expected data', () => { ... });
+  test('handles user interaction', () => { ... });
+  test('displays error states', () => { ... });
+  test('handles edge cases', () => { ... });
+});
+```
+
+**Test coverage expectations:**
+- Comprehensive coverage (aim for high percentage)
+- Unit tests for all utilities and hooks
+- Component tests with React Testing Library (or appropriate framework)
+- API endpoint tests for all routes
+- Integration tests for user flows
+- Edge case tests (empty states, errors, validation failures)
+- Security tests (OWASP vulnerabilities, path traversal, injection)
+
+**Testing verification:**
+- Don't mark tests complete without running them
+- If blocked (e.g., Docker not running), notify immediately
+- All tests must pass before committing
+- Run full test suite after refactoring
+- Never claim something works without testing it
+
+**Manual testing:**
+- Wait for nf to manually verify functionality before committing
+- Provide clear step-by-step instructions when requested
+- Specify exact URLs, files to edit, expected results
+- Wait for confirmation before proceeding
+
+### Component Reuse - CRITICAL
+
+**BEFORE creating ANY new component, hook, or utility:**
+
+1. **ALWAYS consult the reusable components index** (typically `design/reusable-components-index.md`)
+2. **Reusing existing code is CRITICAL**
+3. **Creating duplicate implementations wastes effort and creates maintenance burden**
+4. **When you DO create new reusable code, update the index immediately**
+
+**Reusable components index structure:**
+- Organized by category: Hooks, Components, Utilities
+- Each entry includes:
+  - Name with link to source file
+  - Description of purpose
+  - Usage examples with links to actual usage
+  - When and how it should be used
+
+**Planning UX patterns:**
+- Check index BEFORE designing features
+- Explicitly list which existing components/hooks you'll reuse in plan
+- Follow existing UX patterns (button placement, form layout, etc.)
+- Examples of reusable patterns:
+  - EntitySelect for selecting entities (NOT plain input fields)
+  - Edit/Cancel/Save buttons in section header (NOT inline)
+  - Consistent form field layout and styling
+  - Standard validation and error handling
+
+**Bad vs Good pattern:**
+```markdown
+**BAD:**
+[Custom implementation that duplicates existing functionality]
+
+**GOOD:**
+[Reuse existing EntitySelect/hook/utility with proper configuration]
+```
+
+**When creating new reusable code:**
+1. Follow existing patterns and conventions
+2. Update the reusable components index immediately
+3. Document purpose, usage, and when to use it
+4. Add usage examples with file references
+5. Ensure it's truly reusable (not over-specific to one use case)
+
+### Documentation Maintenance
+
+**Living documentation principle:**
+- Keep docs current after every change
+- Remove cruft and outdated information
+- Update CLAUDE.md to reflect current state
+- Update phase status in project checklists
+- Update 00-key-decisions.md with new decisions
+
+**Documentation organization:**
+- Create 00-index.md as table of contents
+- Organized by topic with one-sentence descriptions
+- Cross-references documented between related docs
+- Use relative links
+
+**After implementation:**
+- Update project-checklist.md phase status
+- Update CLAUDE.md with new capabilities
+- Create phase-N-checklist.md for completed work
+- Update reusable-components-index.md for new reusable code
+- Update 00-key-decisions.md for architectural decisions
+- Remove obsolete sections
+
+**Documentation quality:**
+- Structured for Claude to understand context
+- Concise while retaining quality
+- Concrete examples over abstract descriptions
+- Cross-references between related documents
+- No emojis, standard markdown only
 
 ## Key Preferences
 
@@ -248,19 +496,42 @@ Before any implementation:
   - Any process that continues running after Claude's action completes
 
 ### When to Ask vs Decide
+
+**ALWAYS ask about complexity first:**
+- Before starting any implementation: "How complex is this feature? Should I create formal design docs?"
+- Let nf determine scope of planning needed
+
 **Ask when:**
 - Multiple valid approaches with different tradeoffs
 - User has domain knowledge Claude lacks
 - Clarification needed on requirements or business logic
 - About to remove files or make destructive changes
 - Need to start long-lived processes outside Docker (explain why first)
+- **Technical decisions:**
+  - Which library/package to use
+  - Which architectural pattern to apply
+  - How to structure code organization
+- **UX decisions:**
+  - Button placement and UI flow
+  - Form layout and validation approach
+  - Navigation patterns
+- **Architectural decisions:**
+  - Data model structure
+  - API design principles
+  - System integration approaches
+- **File organization decisions:**
+  - Where to place new files
+  - How to structure directories
+  - What to name things
 
 **Decide when:**
-- Standard formatting or structure choices
+- Standard formatting or structure choices (markdown, code style)
 - Technical implementation details user said to determine
 - Organization of information for clarity
 - User explicitly said "I don't care, however it's best for you"
 - Docker service lifecycle management (restarts, logs, status checks)
+- Following established patterns in the codebase
+- Reusing existing components (after checking reusable index)
 
 **Infer and normalize:**
 - Recognize terminology equivalences (e.g., "datasource" = "data provider")
@@ -269,7 +540,53 @@ Before any implementation:
 - Allow opportunity for clarification
 - After approval, apply consistency across all documents
 
+**Decision documentation:**
+- Document significant decisions in 00-key-decisions.md
+- Include: decision statement, rationale, technical details, examples
+- Reference related documents
+- Explain impact on implementation
+
 ## Common Patterns
+
+### Architecture Review Pattern
+
+**Scan for contradictions/ambiguities:**
+
+This is a critical pattern that happens multiple times during design phase:
+
+1. Claude scans all design documents comprehensively
+2. Identifies contradictions, ambiguities, inconsistencies (typically 12-18 items)
+3. Presents as numbered list: "Issues 1-12 of 12:"
+4. nf says "Let's go through these one by one"
+5. Claude presents issue #1 with details and waits
+6. nf provides resolution
+7. Claude confirms understanding, presents issue #2
+8. Repeat until all resolved
+9. Update all affected documents
+10. Commit changes
+
+**What to scan for:**
+- Contradictions between documents
+- Ambiguous specifications
+- Inconsistent terminology
+- Missing rationale
+- Unclear requirements
+- Phase number mismatches
+- Incomplete cross-references
+
+**Presentation format:**
+```
+Issues 1-12 of 12:
+
+1. [One-line summary of issue]
+2. [One-line summary of issue]
+...
+12. [One-line summary of issue]
+
+Ready to go through these one by one.
+```
+
+Then present each issue in detail with context when asked.
 
 ### Detailed Implementation Checklist Pattern
 For complex implementation phases, create detailed plans as git-tracked checklist files:
