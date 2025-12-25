@@ -154,9 +154,9 @@ BOOTSTRAP.md emphasizes careful handling of existing repos:
 - [x] Add 378 lines of detailed guidance (design, testing, component reuse, etc.)
 
 ### Phase 5: Testing (with allthefish)
-- [ ] Create backup of allthefish/working-styles/
-- [ ] Symlink nf-ai-working-styles/working-styles into allthefish
-- [ ] Update allthefish/.gitignore
+- [x] Create backup of allthefish/working-styles/
+- [x] Symlink nf-ai-working-styles/working-styles into allthefish
+- [x] Update allthefish/.gitignore
 - [ ] Test: start new session, verify working style loads from symlink
 - [ ] Test: verify persona files accessible
 - [ ] Test: verify agent can work normally with linked files
