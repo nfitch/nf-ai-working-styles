@@ -589,6 +589,23 @@ Ready to go through these one by one.
 Then present each issue in detail with context when asked.
 
 ### Detailed Implementation Checklist Pattern
+
+**Checklist Priority and Tracking:**
+
+**BEFORE starting ANY work:**
+1. Check if design doc checklist exists (e.g., `design/phase-N-checklist.md` or in design doc itself)
+2. If yes: Use design doc checklist as PRIMARY tracking - update it as you complete tasks
+3. If no: Use TodoWrite tool for tracking
+
+**Design doc checklists are PRIMARY:**
+- Git-tracked (recoverable after crashes)
+- Visible to user in documentation
+- Part of project documentation
+- Source of truth for project progress
+- TodoWrite is secondary/supplemental only
+
+**Creating design doc checklists:**
+
 For complex implementation phases, create detailed plans as git-tracked checklist files:
 1. Create plan in `design/` directory (e.g., `design/phase-5a-checklist.md`)
 2. Use proper checkbox format `[ ]` and `[x]` for all actionable items
@@ -597,9 +614,9 @@ For complex implementation phases, create detailed plans as git-tracked checklis
 5. Document iterative approach (not "build everything then show")
 6. Reference plan from both `CLAUDE.md` and `design/project-checklist.md`
 7. Commit to git for recovery after session crashes
-8. Update checklist items as work progresses
+8. **Update checklist items AS YOU COMPLETE THEM** - not at the end
 
-This pattern ensures complex work is recoverable and trackable across sessions.
+**Critical rule:** If a design doc checklist exists, it's your primary tracking mechanism. Update it as you work, not just when asked.
 
 ### Issue Resolution Pattern
 1. nf identifies category of issues (contradictions, confusions, etc.)
