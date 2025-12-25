@@ -105,14 +105,7 @@ EOF
 
    This project uses AI agent working styles for consistent collaboration.
 
-   **At the start of each session:**
-
-   1. Ask the user to identify themselves
-   2. Discover available styles: `ls working-styles/`
-   3. Load their working style: `cat working-styles/{user-id}/working-style.md`
-   4. Follow the protocols defined in their working style
-
-   **For detailed information**, see `working-styles/README.md`.
+   Consult `working-styles/README.md` for instructions.
    ```
 
 4. **Create symlink** (if not exists)
