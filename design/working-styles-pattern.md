@@ -157,9 +157,10 @@ BOOTSTRAP.md emphasizes careful handling of existing repos:
 - [x] Create backup of allthefish/working-styles/
 - [x] Symlink nf-ai-working-styles/working-styles into allthefish
 - [x] Update allthefish/.gitignore
-- [ ] Test: start new session, verify working style loads from symlink
-- [ ] Test: verify persona files accessible
-- [ ] Test: verify agent can work normally with linked files
+- [x] Configure user-level permissions in ~/.claude/settings.json
+- [x] Test: start new session, verify working style loads from symlink
+- [x] Test: verify persona files accessible
+- [x] Test: verify agent can work normally with linked files
 
 ## Verification Steps
 
