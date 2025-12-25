@@ -116,17 +116,17 @@ The working styles pattern consists of:
    ```bash
    # Check if .gitignore exists
    if [ -f .gitignore ]; then
-     # Append if it doesn't already contain working-styles/
-     if ! grep -q "working-styles/" .gitignore; then
+     # Append if it doesn't already contain working-styles
+     if ! grep -q "working-styles" .gitignore; then
        echo "" >> .gitignore
        echo "# AI agent working styles (symlinked)" >> .gitignore
-       echo "working-styles/" >> .gitignore
+       echo "working-styles" >> .gitignore
      fi
    else
      # Create new .gitignore
      cat > .gitignore << 'EOF'
 # AI agent working styles (symlinked)
-working-styles/
+working-styles
 EOF
    fi
    ```
@@ -372,7 +372,7 @@ cd project-directory
 ```bash
 ln -s /path/to/nf-ai-working-styles/working-styles ./working-styles
 # Copy claude-template.md to CLAUDE.md
-# Add working-styles/ to .gitignore
+# Add working-styles to .gitignore
 # Verify
 ```
 

@@ -92,10 +92,10 @@ Meta-level instructions for working IN this repository:
 ## Key Design Decisions
 
 ### Symlinks in .gitignore
-When using symlinked working-styles/, add to .gitignore:
+When using symlinked working-styles, add to .gitignore:
 ```
 # AI agent working styles (symlinked)
-working-styles/
+working-styles
 ```
 
 This prevents committing the symlink while allowing each developer to point to their own nf-ai-working-styles location.

@@ -65,7 +65,7 @@ Projects that want to use these working styles:
 
 1. **Symlink** the working-styles/ directory into the project
 2. **Add minimal pointers** to project's CLAUDE.md (see claude-template.md for example)
-3. **Add** working-styles/ to project's .gitignore
+3. **Add** working-styles to project's .gitignore
 4. **Session starts** with user identification, agent loads from working-styles/{user}/
 
 **For Claude:** See BOOTSTRAP.md for complete instructions on bootstrapping projects (3 scenarios) and verifying installations.
