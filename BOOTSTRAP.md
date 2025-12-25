@@ -10,6 +10,35 @@ The working styles pattern consists of:
 3. `.gitignore` entry for the symlinked directory
 4. User-level permissions in `~/.claude/settings.json` to allow reading symlinked directory
 
+## CRITICAL: Explain Plan and Get User Approval First
+
+**BEFORE starting any bootstrap implementation:**
+
+1. **Explore and understand** what needs to be done:
+   - Read this BOOTSTRAP.md file
+   - Check the current state of the target repository
+   - Determine which scenario applies (A, B, or C)
+
+2. **Explain the plan to the user**:
+   - Tell them which scenario you identified
+   - List all steps you will take (be specific)
+   - Explain what each step does, especially:
+     - Modifying ~/.claude/settings.json (user-level configuration)
+     - Creating symlinks (what they point to)
+     - Creating/modifying files in their repository
+
+3. **Wait for user approval**:
+   - Ask: "Does this approach sound good? Should I proceed?"
+   - Only start implementation after user confirms
+
+4. **Then proceed** with the bootstrap steps
+
+**Why this is critical:**
+- Users need to understand what will happen to their system
+- ~/.claude/settings.json is a user-level configuration file
+- Users may want to modify the plan or ask questions first
+- This builds trust and ensures informed consent
+
 ## User-Level Permissions (Required for All Scenarios)
 
 **CRITICAL:** Due to symlink limitations, you must configure user-level permissions FIRST.
