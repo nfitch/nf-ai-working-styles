@@ -5,9 +5,57 @@
 ## Overview
 
 The working styles pattern consists of:
-1. Symlinked `working-styles/` directory in the root of a target repository.
+1. Symlinked `working-styles/` directory in the root of a target repository
 2. Minimal working styles section in project's `CLAUDE.md`
 3. `.gitignore` entry for the symlinked directory
+4. User-level permissions in `~/.claude/settings.json` to allow reading symlinked directory
+
+## User-Level Permissions (Required for All Scenarios)
+
+**CRITICAL:** Due to symlink limitations, you must configure user-level permissions FIRST.
+
+**Add to `~/.claude/settings.json`:**
+
+1. **Read the current settings**
+   ```bash
+   cat ~/.claude/settings.json
+   ```
+
+2. **Add additionalDirectories** (merge with existing content):
+   ```json
+   {
+     "permissions": {
+       "additionalDirectories": [
+         "/absolute/path/to/nf-ai-working-styles/working-styles"
+       ]
+     }
+   }
+   ```
+
+3. **If file already has permissions block, merge it**:
+   ```json
+   {
+     "existingKey": "existingValue",
+     "permissions": {
+       "additionalDirectories": [
+         "/absolute/path/to/nf-ai-working-styles/working-styles"
+       ],
+       "allow": [
+         "existing rules..."
+       ]
+     }
+   }
+   ```
+
+**Why this is required:**
+- Symlinks point outside project directory tree
+- Claude Code cannot read through symlinks without explicit permission
+- User-level settings apply to all projects
+- Project-level additionalDirectories does NOT work for symlinks (undocumented limitation)
+
+**This step must be done once per user, not per project.**
+
+---
 
 ## Three Bootstrap Scenarios
 
@@ -123,6 +171,18 @@ EOF
 
 After bootstrap, verify the installation is correct:
 
+### 0. Check User-Level Permissions
+```bash
+cat ~/.claude/settings.json | grep -A 5 additionalDirectories
+# Should show: "/path/to/nf-ai-working-styles/working-styles"
+```
+
+Verify:
+- User-level settings file exists at `~/.claude/settings.json`
+- Contains `permissions.additionalDirectories` array
+- Array includes absolute path to nf-ai-working-styles/working-styles
+- Path matches where nf-ai-working-styles is actually located
+
 ### 1. Check Symlink Exists
 ```bash
 ls -la working-styles
@@ -177,6 +237,9 @@ After running verification, provide report:
 
 ```
 Working Styles Installation Verification
+
+0. User-level permissions configured: [PASS/FAIL]
+   ~/.claude/settings.json has additionalDirectories with correct path
 
 1. Symlink exists: [PASS/FAIL]
    Location: ./working-styles -> /path/to/...
