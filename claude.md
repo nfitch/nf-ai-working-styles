@@ -30,10 +30,17 @@ nf-ai-working-styles/
 ├── LICENSE                         (project license)
 ├── design/                         (design documentation)
 │   └── working-styles-pattern.md   (complete design + checklist)
+├── templates/                      (templates for projects)
+│   └── claude/                     (Claude Code configuration templates)
+│       ├── README.md               (template usage instructions)
+│       ├── current-user.example    (example user identifier file)
+│       └── hooks/
+│           └── post-compaction     (hook that displays reminders after compaction)
 └── working-styles/                 (portable working styles)
     ├── README.md                   (explains the system)
     └── nf/                         (nf's working style)
         ├── working-style.md        (core style + session protocols)
+        ├── reminders.md            (condensed reminders for post-compaction)
         ├── persona-1-bootstrapper.md
         ├── persona-2-architect-guru.md
         ├── persona-3-doc-reviewer.md
@@ -101,10 +108,11 @@ When working in nf-ai-working-styles itself:
 **Files Created:**
 - claude.md (this file)
 - claude-template.md (minimal pointers example)
-- BOOTSTRAP.md (Claude bootstrap/verify instructions)
+- BOOTSTRAP.md (Claude bootstrap/verify instructions with hook verification)
 - .gitignore
 - design/working-styles-pattern.md (complete design + checklist)
+- templates/claude/ (hook templates and configuration examples)
 - working-styles/README.md (system explanation)
-- working-styles/nf/ (12 files: working-style.md, 9 personas, 2 loop files)
+- working-styles/nf/ (13 files: working-style.md, reminders.md, 9 personas, 2 loop files)
 
 **Next Steps:** Test pattern by linking into allthefish
