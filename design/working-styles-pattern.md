@@ -31,19 +31,31 @@ Create a reusable working styles system that can be linked into any project:
 nf-ai-working-styles/              (source repository)
 ├── claude.md                       (instructions for working IN this repo)
 ├── claude-template.md              (template for projects to copy)
-├── BOOTSTRAP.md                    (human setup instructions)
+├── BOOTSTRAP.md                    (Claude bootstrap/verify instructions)
+├── .gitignore                      (standard ignores)
 ├── design/                         (design docs)
 │   └── working-styles-pattern.md   (this file)
+├── templates/                      (templates for projects)
+│   └── claude/                     (Claude Code configuration templates)
+│       ├── README.md               (template usage instructions)
+│       ├── current-user.example    (user identifier template)
+│       └── hooks/
+│           └── post-compaction     (displays reminders after compaction)
 └── working-styles/                 (portable working styles)
     ├── README.md                   (explains the system)
     └── nf/                         (nf's working style)
         ├── working-style.md        (core style + session protocols)
-        ├── persona-*.md            (9 specialized personas)
+        ├── reminders.md            (condensed reminders for post-compaction)
+        ├── persona-*.md            (specialized personas)
         └── infinite-loop-refactoring-agent.md
 
 project-repo/                       (any project using the pattern)
 ├── CLAUDE.md                       (from template - minimal, project-specific)
-├── .gitignore                      (ignores working-styles/)
+├── .gitignore                      (ignores working-styles/ and .claude/current-user)
+├── .claude/
+│   ├── current-user                (user identifier - gitignored)
+│   └── hooks/
+│       └── post-compaction         (copied from templates)
 └── working-styles/ -> /path/to/nf-ai-working-styles/working-styles/
 ```
 
@@ -51,42 +63,52 @@ project-repo/                       (any project using the pattern)
 
 ### 1. claude-template.md
 Minimal template for project CLAUDE.md files. Contains only:
-- Session start: identify user, load from working-styles/{user}/
-- Directory discovery mechanism
-- Reference to working-styles/README.md
+- Reference to working-styles/README.md for session startup instructions
 - Everything else is project-specific
 
+The template is intentionally minimal - all working style logic lives in working-styles/README.md
+
 ### 2. BOOTSTRAP.md
-Human-readable instructions for setting up the pattern in a project. Covers three scenarios:
+Instructions for Claude (AI agent) on how to bootstrap the pattern in a project. Human-readable so users can understand the process. Covers three scenarios:
 - **Scenario A**: Brand new empty repository
 - **Scenario B**: Existing repository with no CLAUDE.md
 - **Scenario C**: Existing repository with existing CLAUDE.md (merge/append)
 
 Includes:
+- User-level permissions configuration in ~/.claude/settings.json
 - Symlink creation commands (handling different starting locations)
+- Claude hooks setup (.claude/hooks/post-compaction)
+- Current user file creation (.claude/current-user)
 - .gitignore modifications (careful appending, not overwriting)
-- Verification steps (symlink exists, CLAUDE.md structure, .gitignore correct)
+- Verification steps (10 steps including hooks, symlinks, permissions)
 - Debugging guidance
 
 ### 3. working-styles/README.md
 Explains the working styles system itself:
 - What working styles are
-- How they work
+- How they work (including .claude/current-user optimization)
 - How to add new styles
-- Session flow overview
+- Session flow examples
+- Instructions for AI agents at session start
 
 ### 4. working-styles/nf/
-Complete nf working style (copied from allthefish):
-- working-style.md: Core style, session protocols, personas index
-- All 9 persona files
-- infinite-loop-refactoring-agent.md (moved from allthefish root)
+Complete nf working style:
+- working-style.md: Core style, session protocols (including .claude/current-user check), personas index
+- reminders.md: Condensed reminders displayed after conversation compaction
+- Persona files: Specialized modes for different tasks
+- infinite-loop-refactoring-agent.md: Autonomous refactoring mode
 
-### 5. claude.md (for nf-ai-working-styles repo)
+### 5. templates/claude/
+Templates for Claude Code hooks and configuration that projects copy:
+- hooks/post-compaction: Displays reminders after conversation compaction
+- current-user.example: Example user identifier file
+- README.md: Installation and usage instructions
+
+### 6. claude.md (for nf-ai-working-styles repo)
 Meta-level instructions for working IN this repository:
 - Project structure explanation
 - Reference to this design doc
 - Reference to BOOTSTRAP.md
-- Note: no verification script needed (manual steps in BOOTSTRAP.md)
 - Standard working styles session protocols apply
 
 ## Key Design Decisions
@@ -136,7 +158,7 @@ BOOTSTRAP.md emphasizes careful handling of existing repos:
 - [x] Create working-styles/nf/ directory
 - [x] Copy all files from allthefish/working-styles/nf/
 - [x] Copy infinite-loop-refactoring-agent.md from allthefish root to working-styles/nf/
-- [x] Verify all 12 files copied correctly
+- [x] Verify all files copied correctly
 
 ### Phase 3: Documentation
 - [x] Create working-styles/README.md (explain system)
@@ -164,13 +186,17 @@ BOOTSTRAP.md emphasizes careful handling of existing repos:
 
 ## Verification Steps
 
-After bootstrap, verify:
-1. Symlink exists: `ls -la working-styles/`
-2. Symlink target correct: `readlink working-styles`
-3. CLAUDE.md exists and has working styles section
-4. .gitignore includes working-styles/
-5. Can list available styles: `ls working-styles/`
-6. Can read style files: `cat working-styles/nf/working-style.md`
+After bootstrap, verify (see BOOTSTRAP.md for complete verification procedure):
+1. User-level permissions configured in ~/.claude/settings.json
+2. Symlink exists and points to correct target
+3. Symlink accessible (can list and read files)
+4. CLAUDE.md has working styles section
+5. .gitignore includes working-styles/ and .claude/current-user
+6. Claude hooks directory exists with post-compaction hook
+7. Hook is executable
+8. Current user file exists and contains user identifier
+9. User reminders file accessible via symlink
+10. Hook execution test passes
 
 ## Success Criteria
 

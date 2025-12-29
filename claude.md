@@ -113,6 +113,6 @@ When working in nf-ai-working-styles itself:
 - design/working-styles-pattern.md (complete design + checklist)
 - templates/claude/ (hook templates and configuration examples)
 - working-styles/README.md (system explanation)
-- working-styles/nf/ (13 files: working-style.md, reminders.md, 9 personas, 2 loop files)
+- working-styles/nf/ (working-style.md, reminders.md, personas, loop files)
 
 **Next Steps:** Test pattern by linking into allthefish

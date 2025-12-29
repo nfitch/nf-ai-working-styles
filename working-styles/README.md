@@ -123,33 +123,16 @@ The AI agent will automatically discover your style directory and offer it as an
 
 ## For Project Maintainers
 
-To use this working styles system in your project:
+To use this working styles system in your project, see the nf-ai-working-styles repository's BOOTSTRAP.md for complete instructions.
 
-1. **Symlink** this directory into your project:
-   ```bash
-   ln -s /path/to/nf-ai-working-styles/working-styles ./working-styles
-   ```
+The setup includes:
+- Symlinking working-styles/ directory
+- Configuring user-level permissions
+- Setting up Claude Code hooks for post-compaction reminders
+- Creating .claude/current-user file
+- Updating .gitignore
 
-2. **Add to .gitignore**:
-   ```
-   # AI agent working styles (symlinked)
-   working-styles/
-   ```
-
-3. **Update project CLAUDE.md** to include session start:
-   ```markdown
-   ## Working Styles
-
-   At the start of each session:
-   1. Ask the user to identify themselves
-   2. List available styles: `ls working-styles/`
-   3. Load their working style from `working-styles/{user-id}/working-style.md`
-   4. Follow the protocols defined in their working style
-
-   See working-styles/README.md for more information.
-   ```
-
-See the project's BOOTSTRAP.md for detailed setup instructions.
+BOOTSTRAP.md covers three scenarios (new repo, existing repo without CLAUDE.md, existing repo with CLAUDE.md) and includes comprehensive verification steps.
 
 ## Benefits
 
