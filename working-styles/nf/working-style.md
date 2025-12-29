@@ -8,8 +8,14 @@ This document captures nf's preferences and patterns for working with Claude on 
 
 **At the very start of EVERY session, before doing anything else:**
 
-1. Ask the user to identify themselves
-2. If user identifies as "nf":
+1. **Check for current user file:**
+   - If `.claude/current-user` exists, read it to get user identifier
+   - If file doesn't exist or is empty, ask user to identify themselves and create the file:
+     ```bash
+     echo "nf" > .claude/current-user
+     ```
+
+2. **If user is "nf":**
    - Load this working style file (`working-style.md`)
    - Ask what persona to use for this session (by number), showing the Personas index with descriptions
    - **AFTER** user selects persona number, load the specific persona file (e.g., `persona-5-technical-reviewer.md`)
@@ -17,7 +23,7 @@ This document captures nf's preferences and patterns for working with Claude on 
    - **If the persona file has common tasks, present them as numbered options and ask which task or "something else"**, otherwise ask nf why they loaded this persona before starting any work
    - Wait for nf's response, then proceed with work
 
-If the user is not nf, follow standard working style discovery process.
+**If the user is not nf**, follow standard working style discovery process.
 
 **Loading optimization:** Only load the selected persona file, not all 6 persona files. This keeps session startup fast.
 
@@ -125,7 +131,7 @@ Different sessions may require different personas. At the start of each session,
 ### Expected Response Style
 - **Extreme conciseness:** Keep all communication as concise as possible. Eliminate redundancy and unnecessary words.
 - **Numbered options:** When presenting multiple choices, provide numbered options to minimize typing required for selection
-- **NEVER estimate time:** Do not tell nf how long you think something will take. Don't say "this will take 15-20 minutes" or similar. Just do the work.
+- **NEVER discuss timelines or schedules:** No time estimates, durations, or completion timelines. Never say "Day 1-2: do this", "this will take X days/weeks", "in 12 days", or similar. Focus on WHAT needs to be done, not WHEN. Break work into steps without time estimates. Just do the work.
 - Present work for review, don't ask unnecessary questions
 - When presenting options, show actual content not descriptions
 - Acknowledge feedback simply, implement changes

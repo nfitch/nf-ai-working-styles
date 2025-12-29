@@ -9,6 +9,8 @@ The working styles pattern consists of:
 2. Minimal working styles section in project's `CLAUDE.md`
 3. `.gitignore` entry for the symlinked directory
 4. User-level permissions in `~/.claude/settings.json` to allow reading symlinked directory
+5. Claude Code hooks in `.claude/hooks/` for post-compaction reminders
+6. User identifier in `.claude/current-user` file
 
 ## CRITICAL: Explain Plan and Get User Approval First
 
@@ -131,7 +133,35 @@ EOF
    fi
    ```
 
-5. **Verify installation** (see Verification section below)
+5. **Setup Claude hooks**
+   ```bash
+   # Create .claude directory structure
+   mkdir -p .claude/hooks
+
+   # Copy hook template from nf-ai-working-styles
+   STYLES_REPO="/path/to/nf-ai-working-styles"
+   cp "$STYLES_REPO/templates/claude/hooks/post-compaction" .claude/hooks/
+   cp "$STYLES_REPO/templates/claude/current-user.example" .claude/
+
+   # Make hook executable
+   chmod +x .claude/hooks/post-compaction
+
+   # Create current-user file (replace 'nf' with actual identifier)
+   echo "nf" > .claude/current-user
+   ```
+
+6. **Update .gitignore for Claude config**
+   ```bash
+   # Add to .gitignore (append if not present)
+   if ! grep -q ".claude/current-user" .gitignore; then
+     echo "" >> .gitignore
+     echo "# Claude Code per-user configuration" >> .gitignore
+     echo ".claude/current-user" >> .gitignore
+     echo ".claude/settings.local.json" >> .gitignore
+   fi
+   ```
+
+7. **Verify installation** (see Verification section below)
 
 ### Scenario B: Existing Repository with No CLAUDE.md
 
@@ -148,7 +178,7 @@ EOF
    fi
    ```
 
-2. **Follow Scenario A steps** (symlink, create CLAUDE.md, update .gitignore)
+2. **Follow Scenario A steps** (symlink, create CLAUDE.md, setup hooks, update .gitignore)
 
 3. **Verify installation**
 
@@ -192,9 +222,11 @@ EOF
    fi
    ```
 
-5. **Update .gitignore** (same as Scenario A, careful append)
+5. **Setup Claude hooks** (same as Scenario A)
 
-6. **Verify installation**
+6. **Update .gitignore** (same as Scenario A, careful append)
+
+7. **Verify installation**
 
 ## Verification Steps
 
@@ -258,6 +290,45 @@ ls working-styles/
 cat working-styles/nf/working-style.md
 ```
 
+### 7. Check Claude Hooks Configuration
+```bash
+# Check .claude directory exists
+test -d .claude && echo "PASS" || echo "FAIL"
+
+# Check post-compaction hook exists
+test -f .claude/hooks/post-compaction && echo "PASS" || echo "FAIL"
+
+# Check hook is executable
+test -x .claude/hooks/post-compaction && echo "PASS" || echo "FAIL"
+
+# Check current-user file exists
+test -f .claude/current-user && echo "PASS" || echo "FAIL"
+
+# Display current user
+cat .claude/current-user
+```
+
+### 8. Verify User Reminders File
+```bash
+# Determine current user
+CURRENT_USER=$(cat .claude/current-user | tr -d '\n\r')
+
+# Check reminders file exists for current user
+test -f "working-styles/$CURRENT_USER/reminders.md" && echo "PASS" || echo "FAIL"
+```
+
+### 9. Test Hook Execution
+```bash
+# Run the post-compaction hook
+./.claude/hooks/post-compaction
+```
+
+Expected output:
+- Banner with "CRITICAL REMINDERS AFTER COMPACTION"
+- User-specific reminders from working-styles/{user}/reminders.md
+- Project-specific reminders (if design/project-reminders.md exists)
+- No errors
+
 All commands should succeed without errors.
 
 ## Verification Report Format
@@ -288,6 +359,18 @@ Working Styles Installation Verification
 
 6. Style files readable: [PASS/FAIL]
    Tested: working-styles/nf/working-style.md
+
+7. Claude hooks configured: [PASS/FAIL]
+   .claude/hooks/post-compaction exists and is executable
+
+8. Current user configured: [PASS/FAIL]
+   .claude/current-user contains: [username]
+
+9. User reminders file exists: [PASS/FAIL]
+   working-styles/{username}/reminders.md exists
+
+10. Hook execution test: [PASS/FAIL]
+    Hook displays reminders correctly
 
 Overall: [PASS/FAIL]
 ```
@@ -328,6 +411,39 @@ Overall: [PASS/FAIL]
 - Section placed incorrectly
 - Fix: Move section to appropriate location using Edit tool
 - Working styles section should be near top, before project-specific content
+
+### Post-compaction hook not found
+- .claude/hooks/ directory missing or hook not created
+- Fix: Create the hook from template
+  ```bash
+  mkdir -p .claude/hooks
+  # Copy hook template from nf-ai-working-styles
+  cp /path/to/nf-ai-working-styles/templates/claude/hooks/post-compaction .claude/hooks/
+  chmod +x .claude/hooks/post-compaction
+  ```
+
+### Hook not executable
+- File permissions incorrect
+- Fix: Make hook executable
+  ```bash
+  chmod +x .claude/hooks/post-compaction
+  ```
+
+### Hook displays "NO USER-SPECIFIC REMINDERS"
+- .claude/current-user file missing or empty
+- Fix: Create current-user file with your identifier
+  ```bash
+  echo "nf" > .claude/current-user
+  ```
+
+### Reminders file not found
+- working-styles/{user}/reminders.md doesn't exist
+- Fix: Create reminders file
+  ```bash
+  # File should exist in nf-ai-working-styles/working-styles/{user}/
+  # and be accessible via symlink
+  ls -la working-styles/nf/reminders.md
+  ```
 
 ## Path Determination
 

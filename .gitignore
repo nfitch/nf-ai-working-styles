@@ -11,3 +11,7 @@
 # Temporary files
 *.tmp
 *.bak
+
+# Claude Code per-user configuration
+.claude/current-user
+.claude/settings.local.json

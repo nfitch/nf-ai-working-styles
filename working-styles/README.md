@@ -25,18 +25,28 @@ With working styles, AI agents automatically adapt to each user's preferences by
 
 At the start of each session:
 
-1. **Identify the user** - Ask "Please identify yourself" or similar
-2. **Discover available styles** - List directories in `working-styles/`:
+1. **Check for current user** - Read `.claude/current-user` file if it exists:
    ```bash
-   ls working-styles/
+   cat .claude/current-user
    ```
-3. **Load the user's style** - Read `working-styles/{user-id}/working-style.md`
-4. **Follow the protocols** - The working-style.md file contains:
+   If file doesn't exist or is empty, ask "Please identify yourself" and create the file:
+   ```bash
+   echo "user-id" > .claude/current-user
+   ```
+
+2. **Load the user's style** - Read `working-styles/{user-id}/working-style.md`
+
+3. **Follow the protocols** - The working-style.md file contains:
    - Session start protocol (personas, task selection, etc.)
    - Session exit protocol (git status, doc checks, reflection)
    - Communication preferences
    - Review processes
    - All other user-specific preferences
+
+**Note:** Available styles can be discovered by listing directories in `working-styles/`:
+```bash
+ls working-styles/
+```
 
 ### For Users (Humans)
 
@@ -82,25 +92,30 @@ The AI agent will automatically discover your style directory and offer it as an
 
 1. **Session starts**
    ```
-   Agent: "Please identify yourself"
-   User: "nf"
-   ```
-
-2. **Agent discovers and loads**
-   ```
+   Agent: (checks .claude/current-user file)
+   Agent: (finds "nf" in current-user file)
    Agent: (reads working-styles/nf/working-style.md)
    Agent: (follows nf's session start protocol)
    Agent: "Which persona would you like to use? 1. Bootstrapper, 2. Architect Guru..."
    User: "6"
    ```
 
-3. **Agent loads persona and works**
+   **Or if current-user file doesn't exist:**
+   ```
+   Agent: "Please identify yourself"
+   User: "nf"
+   Agent: (creates .claude/current-user with "nf")
+   Agent: (reads working-styles/nf/working-style.md)
+   Agent: (follows nf's session start protocol)
+   ```
+
+2. **Agent loads persona and works**
    ```
    Agent: (reads working-styles/nf/persona-6-expert-swe.md)
    Agent: (follows TDD workflow, writes tests first, etc.)
    ```
 
-4. **Session ends**
+3. **Session ends**
    ```
    User: "I'm preparing to exit"
    Agent: (follows nf's exit protocol: git status check, doc scan, reflection)
