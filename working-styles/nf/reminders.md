@@ -43,6 +43,11 @@ These reminders should appear after every conversation compaction to maintain co
 
 ## Git Workflow
 
+**NEVER use git add -A or git add . - ZERO TOLERANCE**
+- ONLY stage specific files you modified: `git add file1 file2 file3`
+- Multiple agents work in repo simultaneously - staging everything causes conflicts
+- Be explicit about what you're committing
+
 **Commit Frequently**
 - Make git commits periodically to save progress
 - Use descriptive commit messages
