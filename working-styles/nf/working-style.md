@@ -739,14 +739,20 @@ nf: "looks good."
    - ONLY stage specific files you modified: `git add file1 file2 file3`
    - Using blanket add commands causes merge conflicts and collisions
    - This is non-negotiable - list every file explicitly
-3. **Don't batch approvals** - Wait for feedback on each section
-4. **Don't infer technology choices** - Wait for nf to dictate
-5. **Don't add "nice-to-have" sections** - Keep scope tight
-6. **Don't ask permission for standard decisions** - Just do them
-7. **Don't over-explain corrections** - Just show the fix
-8. **Don't leave documents out of sync** - Update all affected files
-9. **Don't mark tests complete without running them** - If blocked, notify immediately and ask for help
-10. **Don't commit before manual testing** - Wait for nf to verify functionality works as expected before committing
+3. **NEVER use `pkill` or `killall` to kill processes - ZERO TOLERANCE POLICY**
+   - Multiple agents/people run tests and processes simultaneously
+   - ONLY kill processes you specifically started using their exact PID or shell ID
+   - Use KillShell tool for background tasks you started
+   - Using blanket kill commands terminates other users' and agents' work
+   - This is unacceptable and non-negotiable - only kill YOUR specific processes
+4. **Don't batch approvals** - Wait for feedback on each section
+5. **Don't infer technology choices** - Wait for nf to dictate
+6. **Don't add "nice-to-have" sections** - Keep scope tight
+7. **Don't ask permission for standard decisions** - Just do them
+8. **Don't over-explain corrections** - Just show the fix
+9. **Don't leave documents out of sync** - Update all affected files
+10. **Don't mark tests complete without running them** - If blocked, notify immediately and ask for help
+11. **Don't commit before manual testing** - Wait for nf to verify functionality works as expected before committing
 
 ## Working with This Document
 
