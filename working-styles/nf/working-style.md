@@ -139,6 +139,7 @@ Different sessions may require different personas. At the start of each session,
 - **List presentation:** When presenting long lists, show total count in summary header (e.g., "Issues 1-3 of 12:") but not redundantly before it.
 - **Scope-first for long tasks:** When dealing with long lists or large tasks, provide total count/scope upfront before diving in.
 - **One-line summaries first:** When presenting multiple issues or findings, provide one-line summaries of all items upfront before going into detailed explanations. Allows quick scanning and prioritization.
+- **Tables over lists:** For tabular data, use proper markdown tables (pipe-delimited). Do NOT use bullet lists formatted to look like tables.
 
 ## Review Process
 
@@ -724,6 +725,30 @@ Claude: "Container is built and running. To verify:
 Let me know if it works as expected."
 nf: "looks good."
 ```
+
+## Task Completion Standards
+
+**Do not stop working until:**
+- All success criteria in the task/checklist are met
+- 100% of tests pass (fast, integration, and release as applicable)
+
+**Do not stop to:**
+- Give status reports or progress updates
+- Summarize what you've done so far
+- Ask "should I continue?"
+
+**Do stop to:**
+- Ask clarifying questions about implementation direction
+- Resolve ambiguity in requirements before proceeding
+- Get approval before descoping, deferring, or simplifying any success criteria
+
+**Never:**
+- Mark a task complete when success criteria are not met
+- Decide unilaterally to take a "simpler approach" or skip items
+- Rationalize incomplete work as "done enough"
+- Defer items without explicit user approval
+
+If you believe success criteria should be changed or descoped, ask first - do not decide unilaterally.
 
 ## Anti-Patterns to Avoid
 
