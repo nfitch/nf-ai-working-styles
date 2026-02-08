@@ -344,6 +344,21 @@ Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
 
 ### Testing Patterns
 
+**Efficient Test Execution - CRITICAL:**
+Integration and release tests take 3-5 minutes. NEVER run them multiple times to get different views of the output.
+
+```bash
+# CORRECT - capture once, analyze multiple times:
+npm run test:integration 2>&1 | tee /tmp/test-output.txt
+tail -30 /tmp/test-output.txt        # summary
+grep "FAIL" /tmp/test-output.txt     # failures
+grep -A 10 "error" /tmp/test-output.txt  # error details
+
+# WRONG - running tests multiple times:
+npm run test:integration 2>&1 | tail -30   # First run
+npm run test:integration 2>&1 | grep "FAIL" # Second run - WASTEFUL!
+```
+
 **TDD Approach - ALWAYS:**
 1. Write comprehensive tests FIRST
 2. Implement code to pass tests
@@ -752,32 +767,39 @@ If you believe success criteria should be changed or descoped, ask first - do no
 
 ## Anti-Patterns to Avoid
 
-1. **NEVER USE EMOJIS - ZERO TOLERANCE POLICY**
+1. **NEVER USE EnterPlanMode - ZERO TOLERANCE POLICY**
+   - Plan mode locks the session and can only be exited with ExitPlanMode
+   - If ExitPlanMode is rejected, the session becomes stuck and must be killed
+   - Orphaned plan files in `.claude/plans/` can confuse new sessions
+   - **ALWAYS use .md files for planning instead** - write plans to project directories
+   - Ask the user where to put the design file if unclear (sometimes `design/`, sometimes `forposterity/`, sometimes elsewhere)
+   - .md files are version-controlled, visible, and don't lock the session
+2. **NEVER USE EMOJIS - ZERO TOLERANCE POLICY**
    - NO checkmarks: ✅
    - NO crosses: ❌
    - NO emoji bullets or decorations of any kind
    - Use plain text words: "Done", "Complete", "Fixed", "Added", "Updated"
    - Use markdown checkboxes `[x]` and `[ ]` for task lists ONLY
    - Violations of this rule require immediate working style updates
-2. **NEVER use `git add -A` or `git add .` - ZERO TOLERANCE POLICY**
+3. **NEVER use `git add -A` or `git add .` - ZERO TOLERANCE POLICY**
    - Multiple agents/people work in repo simultaneously
    - ONLY stage specific files you modified: `git add file1 file2 file3`
    - Using blanket add commands causes merge conflicts and collisions
    - This is non-negotiable - list every file explicitly
-3. **NEVER use `pkill` or `killall` to kill processes - ZERO TOLERANCE POLICY**
+4. **NEVER use `pkill` or `killall` to kill processes - ZERO TOLERANCE POLICY**
    - Multiple agents/people run tests and processes simultaneously
    - ONLY kill processes you specifically started using their exact PID or shell ID
    - Use KillShell tool for background tasks you started
    - Using blanket kill commands terminates other users' and agents' work
    - This is unacceptable and non-negotiable - only kill YOUR specific processes
-4. **Don't batch approvals** - Wait for feedback on each section
-5. **Don't infer technology choices** - Wait for nf to dictate
-6. **Don't add "nice-to-have" sections** - Keep scope tight
-7. **Don't ask permission for standard decisions** - Just do them
-8. **Don't over-explain corrections** - Just show the fix
-9. **Don't leave documents out of sync** - Update all affected files
-10. **Don't mark tests complete without running them** - If blocked, notify immediately and ask for help
-11. **Don't commit before manual testing** - Wait for nf to verify functionality works as expected before committing
+5. **Don't batch approvals** - Wait for feedback on each section
+6. **Don't infer technology choices** - Wait for nf to dictate
+7. **Don't add "nice-to-have" sections** - Keep scope tight
+8. **Don't ask permission for standard decisions** - Just do them
+9. **Don't over-explain corrections** - Just show the fix
+10. **Don't leave documents out of sync** - Update all affected files
+11. **Don't mark tests complete without running them** - If blocked, notify immediately and ask for help
+12. **Don't commit before manual testing** - Wait for nf to verify functionality works as expected before committing
 
 ## Working with This Document
 
