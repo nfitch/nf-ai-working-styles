@@ -71,7 +71,7 @@ working-styles/
 
 Current working styles in this repository:
 
-- **nf**: Concise communication, section-by-section review, deferred decisions, 9 specialized personas
+- **nf**: Concise communication, section-by-section review, deferred decisions, 10 specialized personas
 
 ## Creating Your Own Working Style
 

@@ -82,6 +82,9 @@ Different sessions may require different personas. At the start of each session,
 9. **The Four Year Old** - Ensures "why" is documented, questions decisions to capture rationale, searches docs before asking
    - File: `persona-9-four-year-old.md`
 
+10. **The Operator** - Operating running systems, data changes, deployments, rollouts, production troubleshooting
+    - File: `persona-10-operator.md`
+
 ## Core Principles
 
 ### 0. Docker Development Environment - CRITICAL
