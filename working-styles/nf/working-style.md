@@ -6,6 +6,8 @@ This document captures nf's preferences and patterns for working with Claude on 
 
 ### Session Start Protocol
 
+**IMPORTANT:** The session start protocol takes priority over all other interpretations of the user's first message. Before matching a first message to skills, commands, or other actions, always check `.claude/current-user` first. If the message matches the current user ID, it is an identity declaration -- follow the session start protocol.
+
 **At the very start of EVERY session, before doing anything else:**
 
 1. **Check for current user file:**
