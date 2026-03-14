@@ -51,7 +51,16 @@ nf-ai-working-styles/
         ├── persona-7-loop-instructions.md
         ├── persona-8-qa-hackaroo.md
         ├── persona-9-four-year-old.md
-        └── infinite-loop-refactoring-agent.md
+        ├── persona-10-operator.md
+        ├── infinite-loop-refactoring-agent.md
+        └── commands/                  (portable slash commands)
+            ├── README.md              (installation and usage)
+            ├── nf-start-work.md       (kick off implementation)
+            ├── nf-check-work.md       (verify phase completion)
+            ├── nf-reminders.md        (critical reminders display)
+            ├── nf-session-id.md       (find session ID + create alias)
+            ├── nf-add-session-to-bashrc.md (add session alias to bashrc)
+            └── nf-test-report.md      (run all test suites, produce report)
 ```
 
 ## Design Documentation

@@ -11,6 +11,7 @@ The working styles pattern consists of:
 4. User-level permissions in `~/.claude/settings.json` to allow reading symlinked directory
 5. Claude Code hooks in `.claude/hooks/` for post-compaction reminders
 6. User identifier in `.claude/current-user` file
+7. Slash commands symlinked from `working-styles/{user}/commands/` to `~/.claude/commands/`
 
 ## CRITICAL: Explain Plan and Get User Approval First
 
@@ -161,7 +162,25 @@ EOF
    fi
    ```
 
-7. **Verify installation** (see Verification section below)
+7. **Setup slash command symlinks**
+   ```bash
+   # Determine current user
+   CURRENT_USER=$(cat .claude/current-user | tr -d '\n\r')
+   STYLES_REPO="/path/to/nf-ai-working-styles"
+   COMMANDS_DIR="$STYLES_REPO/working-styles/$CURRENT_USER/commands"
+
+   # Create ~/.claude/commands if it doesn't exist
+   mkdir -p ~/.claude/commands
+
+   # Symlink each command (skip README.md)
+   if [ -d "$COMMANDS_DIR" ]; then
+     for cmd in "$COMMANDS_DIR"/nf-*.md; do
+       ln -sf "$cmd" ~/.claude/commands/$(basename "$cmd")
+     done
+   fi
+   ```
+
+8. **Verify installation** (see Verification section below)
 
 ### Scenario B: Existing Repository with No CLAUDE.md
 
@@ -326,6 +345,31 @@ Expected output:
 - Project-specific reminders (if design/project-reminders.md exists)
 - No errors
 
+### 10. Check Slash Command Symlinks
+```bash
+# Determine current user
+CURRENT_USER=$(cat .claude/current-user | tr -d '\n\r')
+
+# List expected commands from working-styles
+ls working-styles/$CURRENT_USER/commands/nf-*.md 2>/dev/null
+
+# Verify each has a corresponding symlink in ~/.claude/commands/
+for cmd in working-styles/$CURRENT_USER/commands/nf-*.md; do
+  name=$(basename "$cmd")
+  if [ -L ~/.claude/commands/"$name" ]; then
+    target=$(readlink ~/.claude/commands/"$name")
+    echo "PASS: $name -> $target"
+  else
+    echo "FAIL: $name not symlinked in ~/.claude/commands/"
+  fi
+done
+```
+
+Verify:
+- Every `nf-*.md` in `working-styles/{user}/commands/` has a symlink in `~/.claude/commands/`
+- Each symlink points to the correct absolute path
+- No broken symlinks (target files exist)
+
 All commands should succeed without errors.
 
 ## Verification Report Format
@@ -368,6 +412,9 @@ Working Styles Installation Verification
 
 10. Hook execution test: [PASS/FAIL]
     Hook displays reminders correctly
+
+11. Slash command symlinks: [PASS/FAIL]
+    All nf-*.md commands symlinked to ~/.claude/commands/
 
 Overall: [PASS/FAIL]
 ```
@@ -431,6 +478,25 @@ Overall: [PASS/FAIL]
 - Fix: Create current-user file with your identifier
   ```bash
   echo "nf" > .claude/current-user
+  ```
+
+### Slash commands not appearing in Claude Code
+- Symlinks missing or broken in `~/.claude/commands/`
+- Fix: Re-run the symlink loop
+  ```bash
+  STYLES_REPO="/path/to/nf-ai-working-styles"
+  for cmd in "$STYLES_REPO"/working-styles/nf/commands/nf-*.md; do
+    ln -sf "$cmd" ~/.claude/commands/$(basename "$cmd")
+  done
+  ```
+
+### Slash command symlink points to wrong location
+- nf-ai-working-styles repo moved or re-cloned to a different path
+- Fix: Remove old symlinks and re-create with correct path
+  ```bash
+  # Check where current symlinks point
+  ls -la ~/.claude/commands/nf-*.md
+  # Remove broken ones and re-symlink
   ```
 
 ### Reminders file not found
